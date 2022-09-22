@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="border-b py-4 px-6" fxLayout="row" fxLayoutAlign="start center">
+    <h2 class="m-0 title" fxFlex="auto">Resumen de Ingresos Mensuales</h2>
+
+    <button mat-icon-button type="button">
+      <mat-icon [icIcon]="icCloudDownload" class="text-secondary"></mat-icon>
+    </button>
+
+    <button mat-icon-button type="button">
+      <mat-icon [icIcon]="icMoreHoriz" class="text-secondary"></mat-icon>
+    </button>
+  </div>
+
+  <div class="py-6 px-6" fxLayout="row" fxLayout.lt-md="column">
+    <div class="pb-6 pt-4 px-6" fxFlex="40%" fxLayout="column">
+      <h3 class="display-2 font-bold m-0">{{ total | currency:'MXN'}}</h3>
+      <h3 class="title font-medium mt-2 mb-0">Ingresos del mes actual</h3>
+
+      <div class="mt-6" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+        <div class="w-8 h-8 rounded text-green bg-green-light"
+             fxFlex="none"
+             fxLayout="row"
+             fxLayoutAlign="center center">
+          <ic-icon [icon]="faCaretUp" height="20px" inline="true" width="20px"></ic-icon>
+        </div>
+
+        <p class="text-secondary m-0"><span class="font-medium text-green">{{ leyenda }}% de incremento</span> 
+          en comparación con el último mes.
+        </p>
+      </div>
+
+      <div class="mt-4" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+        <div class="w-8 h-8 rounded text-red bg-red-light"
+             fxFlex="none"
+             fxLayout="row"
+             fxLayoutAlign="center center">
+          <ic-icon [icon]="faCaretDown" height="20px" inline="true" width="20px"></ic-icon>
+        </div>
+
+        <p class="text-secondary m-0"><span class="font-medium text-red">{{ leyenda2 }}% en transacciones</span> 
+          en comparación con el último mes.</p>
+      </div>
+
+      <div class="mt-6" fxFlex="auto" fxLayout="column" fxLayoutAlign="end">
+        <button color="primary" mat-raised-button type="button">
+          DESCARGAR INFORME
+        </button>
+      </div>
+    </div>
+
+    <div fxFlex="60%"  fxLayout="column">
+      Historico de ingreso mensual.
+      <vex-chart [options]="options" [series]="series"></vex-chart>
+      <div style="text-align: center;">
+        <p class="text-secondary mt-2">Días transcurridos</p>
+      </div>
+    </div>
+    <br/>
+  </div>
+</div>

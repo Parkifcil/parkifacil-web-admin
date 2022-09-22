@@ -1,0 +1,119 @@
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <!-- Este es el boton de cerrar del popup -->
+    <button type="button" class="text-secondary" mat-icon-button mat-dialog-close>
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+    <h2 class="headline m-0" fxFlex="auto">
+        Movimientos del usuario {{ usuario }}
+    </h2>
+</div>
+<mat-dialog-content fxLayout="column" style="min-height: fit-content;" class="card overflow-auto">
+    <div class="flex flex-col sm:flex-row" style="margin-top: 5px;">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="ID">
+                <th mat-header-cell *matHeaderCellDef> No. </th>
+                <td mat-cell *matCellDef="let element"> {{element.no}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                <td mat-cell *matCellDef="let element"> {{element.fechaInicio | date: 'dd/MM/yyyy'}} </td>
+            </ng-container>
+
+             <!-- Name Column -->
+             <ng-container matColumnDef="horaInicio">
+                <th mat-header-cell *matHeaderCellDef> Hora inicio </th>
+                <td mat-cell *matCellDef="let element"> {{element.fechaInicio | date: 'h:mm:ss a'}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="horaFin">
+                <th mat-header-cell *matHeaderCellDef> Hora fin </th>
+                <td mat-cell *matCellDef="let element"> {{element.fechaFin | date: 'h:mm:ss a'}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="concesion">
+                <th mat-header-cell *matHeaderCellDef> Concesión </th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorVERDE"> {{element.concesion}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="saldoant">
+                <th mat-header-cell *matHeaderCellDef> Saldo anterior </th>
+                <td mat-cell *matCellDef="let element"> {{element.saldoAnterior | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="tiempo">
+                <th mat-header-cell *matHeaderCellDef> Tiempo </th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorVERDE"> {{element.tiempo}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="monto">
+                <th mat-header-cell *matHeaderCellDef> Monto </th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorVERDE"> {{element.monto | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="comision">
+                <th mat-header-cell *matHeaderCellDef> Comisión </th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorVERDE"> {{element.comision | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="cargo">
+                <th mat-header-cell *matHeaderCellDef> Cargo </th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorVERDE"> {{element.cargo | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="devtiempo">
+                <th mat-header-cell *matHeaderCellDef> Tiempo devuelto</th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorROSA"> {{ element.tiempoDevuelto }} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="devolucion">
+                <th mat-header-cell *matHeaderCellDef> Monto devuelto</th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorROSA"> {{element.montoDevuelto | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="comisiondev">
+                <th mat-header-cell *matHeaderCellDef> Comisión devuelta</th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorROSA"> {{element.comisionDevuelta | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="devtotal">
+                <th mat-header-cell *matHeaderCellDef>Monto total de devolución</th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorROSA"> {{element.montoTotalDevolucion | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="tiempototal">
+                <th mat-header-cell *matHeaderCellDef> Tiempo total </th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorVERDEOscuro"> {{element.tiempoTotal}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="montototal">
+                <th mat-header-cell *matHeaderCellDef> Monto total </th>
+                <td mat-cell *matCellDef="let element" [style.background]="colorVERDEOscuro"> {{element.montoTotal | currency:'CAD':'symbol-narrow'}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+    </div>
+</mat-dialog-content>

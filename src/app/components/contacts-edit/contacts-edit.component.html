@@ -1,0 +1,662 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+  <!-- Encabezado de formulario -->
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <img *ngIf="contact?.imageSrc" [src]="contact?.imageSrc" class="avatar ltr:mr-5 rtl:ml-5" />
+    <h2 *ngIf="!form.get('StrNombreCliente')?.value" class="headline m-0" fxFlex="auto">
+      Nuevo Cliente
+    </h2>
+    <h2 *ngIf="form.get('StrNombreCliente')?.value" class="headline m-0" fxFlex="auto">
+      {{ form.get('StrNombreCliente')?.value }}
+    </h2>
+
+    <!--button
+      (click)="toggleStar()"
+      class="text-secondary"
+      mat-icon-button
+      type="button"
+      *ngIf="mode === 'update'"
+    >
+      <mat-icon
+        *ngIf="contact?.starred"
+        [icIcon]="icStar"
+        class="text-amber"
+      ></mat-icon>
+      <mat-icon *ngIf="!contact?.starred" [icIcon]="icStarBorder"></mat-icon>
+    </button-->
+
+    <button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button"
+      *ngIf="mode === 'update'">
+      <mat-icon [icIcon]="icMoreVert"></mat-icon>
+    </button>
+
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+
+  <!-- Separador de encabezado -->
+  <mat-divider class="text-border"></mat-divider>
+  <!-- Tabs de contenido  -->
+  <mat-dialog-content>
+    <div class="p-gutter mt-0" gdColumns="1fr 1fr 1fr 1fr" gdColumns.lt-md="1fr 1fr" gdColumns.lt-sm="1fr" gdGap="16px"
+      vexContainer>
+      <mat-tab-group class="mt-0" gdColumn="1/5">
+        <mat-tab label="Datos Generales">
+          <ng-template mat-tab-label>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+              <mat-icon [icIcon]="icPersona" color="primary"></mat-icon>
+              <span>Datos Generales</span>
+            </div>
+          </ng-template>
+          <!-- CONTROLES DE: DATOS GENERALES -->
+          <div *ngIf="modoCrear();" class="flex flex-col sm:flex-row">
+            <!-- Tipo de cliente -->
+            <span class="mt-6 mr-3">Tipo de Cliente: </span>
+            <mat-radio-group formControlName="StrTipo" class="mt-6" aria-label="Seleccione una opcion" required>
+              <mat-radio-button class="ml-4 mr-6" value="C">Concesión</mat-radio-button>
+              <mat-radio-button class="flex-auto" value="E">Estacionamiento</mat-radio-button>
+              <!-- <mat-radio-button class="flex-auto ml-3" value="M"
+                >Mercado</mat-radio-button
+              >
+              <mat-radio-button class="flex-auto ml-3" value="A"
+                >Ayuntamiento</mat-radio-button
+              > -->
+              <!--mat-error *ngIf="form.get('StrTipo').hasError('required')">Selecciona un tipo de cliente</mat-error-->
+            </mat-radio-group>
+          </div>
+
+          <div class="flex flex-col sm:flex-row">
+            <!-- Clave -->
+            <mat-form-field class="sm:mt-5 " fxFlex="30">
+              <mat-label>Clave</mat-label>
+              <input formControlName="StrClave" matInput oninput="this.value = this.value.toUpperCase()" />
+              <mat-icon [icIcon]="icClave" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error class="form_error" *ngIf="form.get('StrClave').touched && form.get('StrClave').hasError('required')">La clave del cliente es requerida.</mat-error>
+              <mat-error class="form_error" *ngIf="form.get('StrClave').touched && form.get('StrClave').hasError('minlength')">La clave del cliente mínimo debe tener 3 caracteres.</mat-error>
+              <mat-error class="form_error" *ngIf="form.get('StrClave').touched && form.get('StrClave').hasError('maxlength')">La clave del cliente no debe tener más de 50 caracteres.</mat-error>
+              <mat-error class="form_error" *ngIf="form.get('StrClave').hasError('formatoclave')">La clave del cliente puede estar formada de letras y números.</mat-error-->
+            </mat-form-field>
+            <!-- Nombre de concesion o estacionamiento -->
+            <mat-form-field class="mt-5 sm:ml-3" fxFlex="70">
+              <mat-label>Razon social</mat-label>
+              <input formControlName="StrRazonSocial" matInput oninput="this.value = this.value.toUpperCase()" />
+              <mat-icon [icIcon]="icBusiness" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error *ngIf="form.get('str_razon_social').hasError('minlength')">La razón social mínimo debe tener 2 caracteres.</mat-error>
+              <mat-error *ngIf="form.get('str_razon_social').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('str_razon_social').touched && form.get('str_razon_social').hasError('invalidrazon')">La razón social no cumple con el formato.</mat-error-->
+            </mat-form-field>
+          </div>
+
+          <div class="flex flex-col sm:flex-row">
+            <!-- Domicilio -->
+            <mat-form-field class="mt-0 flex-auto">
+              <mat-label>Domicilio</mat-label>
+              <input formControlName="StrDomicilio" matInput oninput="this.value = this.value.toUpperCase()" />
+              <mat-icon [icIcon]="icHome" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error *ngIf="form.get('str_domicilio').touched && form.get('str_domicilio').hasError('required')">El domicilio del cliente es requerido.</mat-error>
+              <mat-error *ngIf="form.get('str_domicilio').touched && form.get('str_domicilio').hasError('minlength')">El domicilio mínimo debe tener 2 caracteres.</mat-error>
+              <mat-error *ngIf="form.get('str_domicilio').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('str_domicilio').hasError('invalidomicilio')">El domicilio del cliente no cumple con el formato.</mat-error-->
+            </mat-form-field>
+          </div>
+
+          <!-- <div class="flex flex-col sm:flex-row">
+            
+            <mat-form-field class="mt-0 flex-auto">
+              <mat-label>Latitud</mat-label>
+              <input matInput formControlName="StrLatitud" />
+              <mat-icon
+                [icIcon]="icLocalizacion"
+                class="ltr:mr-3 rtl:ml-3"
+                matPrefix
+              ></mat-icon>
+              
+            </mat-form-field>
+            
+            <mat-form-field class="sm:mt-0 sm:ml-3 flex-auto">
+              <mat-label>Longitud</mat-label>
+              <input matInput formControlName="StrLongitud" />
+              <mat-icon
+                [icIcon]="icLocalizacion"
+                class="ltr:mr-3 rtl:ml-3"
+                matPrefix
+              ></mat-icon>
+            </mat-form-field>
+            <button  (click)="mtdonClickCoorde()" class="ml-6" color="primary" fxFlex="none" mat-mini-fab matTooltip="Agregar Ruta" type="button">
+              <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+          </div> -->
+
+          <div class="flex flex-col sm:flex-row">
+            <!-- ciudad del cliente -->
+            <mat-form-field class="mt-0 flex-auto">
+              <mat-label for="intidciudad_cat">Ciudad</mat-label>
+              <input *ngIf="modoActualizar() && cliente?.intIdCiudadCat !== null" matInput [value]="selectedCity" disabled />
+              <!--select *ngIf="modoCrear() || cliente?.intIdCiudadCat === null" id="intidciudad_cat" #intidciudad_cat matNativeControl
+                formControlName="IntIdCiudadCat" name="intidciudad_cat"
+                (change)="mtdchangeNombreCiudad($event, intidciudad_cat.value);" required>
+                <option *ngFor="let ciudad of arrciudades" [value]="ciudad.id">
+                  {{ ciudad.strCiudad }}
+                </option>
+              </select-->
+              <mat-select *ngIf="modoCrear() || cliente?.intIdCiudadCat === null" id="IntIdCiudadCat" #intidciudad_cat
+                formControlName="IntIdCiudadCat" name="IntIdCiudadCat"
+                (selectionChange)="mtdchangeNombreCiudad($event, intidciudad_cat.value);">
+                <mat-option *ngFor="let ciudad of arrciudades" [value]="ciudad.id">
+                  {{ ciudad.strCiudad }}
+                </mat-option>
+              </mat-select>
+              <mat-icon [icIcon]="icCity" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <mat-error *ngIf="form.get('IntIdCiudadCat').hasError('required')">La ciudad es requerida.</mat-error>
+            </mat-form-field>
+          </div>
+          <!-- <div class="mb-3 flex flex-col sm:flex-row">
+            <p> Ciudad Seleccionada: {{ selectedCity }} </p>
+          </div> -->
+          <div class="flex flex-col sm:flex-row">
+            <!-- Nombre del cliente -->
+            <mat-form-field class="mt-0 flex-auto">
+              <mat-label>Nombre del cliente</mat-label>
+              <input formControlName="StrNombreCliente" matInput oninput="this.value = this.value.toUpperCase()" />
+              <mat-icon [icIcon]="icPerson" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error *ngIf="form.get('str_nombre_cliente').touched && form.get('str_nombre_cliente').hasError('required')">El nombre del cliente es requerido.</mat-error>
+              <mat-error *ngIf="form.get('str_nombre_cliente').touched && form.get('str_nombre_cliente').hasError('minlength')">El nombre del cliente mínimo debe tener 2 caracteres.</mat-error>
+              <mat-error *ngIf="form.get('str_nombre_cliente').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('str_nombre_cliente').hasError('invalidnombre')">El nombre del cliente no cumple con el formato.</mat-error-->
+            </mat-form-field>
+          </div>
+
+          <div class="flex flex-col sm:flex-row">
+            <!-- Telefono -->
+            <mat-form-field class="mt-0 flex-auto">
+              <mat-label>Teléfono</mat-label>
+              <input formControlName="StrTelefono" matInput />
+              <mat-icon [icIcon]="icPhone" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error *ngIf="form.get('str_telefono').touched && form.get('str_telefono').hasError('minlength')">El teléfono del cliente mínimo debe tener 10 caracteres.</mat-error>
+              <mat-error class="form_error" *ngIf="form.get('str_telefono').touched && form.get('str_telefono').hasError('maxlength')">El teléfono del cliente no debe tener más de 15 caracteres.</mat-error>
+              <mat-error *ngIf="form.get('str_telefono').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('str_telefono').hasError('invalidtelefono')">El teléfono no cumple con el formato.</mat-error-->
+            </mat-form-field>
+            <!-- Correo -->
+            <mat-form-field class="sm:mt-0 sm:ml-3 flex-auto">
+              <mat-label>E-Mail</mat-label>
+              <input formControlName="StrEmail" matInput oninput="this.value = this.value.toUpperCase()" />
+              <mat-icon [icIcon]="icEmail" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error *ngIf="form.get('str_email').touched && form.get('str_email').hasError('required')">El email del cliente es requerido.</mat-error>
+              <mat-error *ngIf="form.get('str_email').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('str_email').hasError('invalidemail')">El email no cumple con el formato.</mat-error-->
+            </mat-form-field>
+          </div>
+
+          <div class="flex flex-col sm:flex-row">
+            <mat-form-field class="mt-0 flex-auto">
+              <mat-label>RFC</mat-label>
+              <input formControlName="StrRfc" matInput oninput="this.value = this.value.toUpperCase()" />
+              <mat-icon [icIcon]="icBusiness" class="mr-3" matPrefix></mat-icon>
+              <mat-error *ngIf="form.get('StrRfc').touched && form.get('StrRfc').hasError('minlength')">
+                El rfc debe contar con un mínimo de 12 caracteres
+              </mat-error>
+              <mat-error *ngIf="form.get('StrRfc').touched && form.get('StrRfc').hasError('maxLength')">
+                El rfc debe contar con un máximo de 13 caracteres
+              </mat-error>
+              <mat-error *ngIf="form.get('StrRfc').touched && form.get('StrRfc').hasError('pattern')">
+                El rfc no cumple con el formato
+              </mat-error>
+              <!--mat-error *ngIf="form.get('str_rfc').touched && form.get('str_rfc').hasError('minlength')">El RFC mínimo debe contener de 10 caracteres.</mat-error>
+              <mat-error *ngIf="form.get('str_rfc').touched && form.get('str_rfc').hasError('maxlength')">El RFC no debe tener más de 13 caracteres.</mat-error>
+              <mat-error *ngIf="form.get('str_rfc').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('str_rfc').hasError('invalidrfc')">El RFC no cumple con el formato.</mat-error-->
+            </mat-form-field>
+
+            <mat-form-field class="sm:mt-0 sm:ml-3 flex-auto">
+              <mat-label>Fecha incorporación</mat-label>
+              <input [matDatepicker]="datepickerRef" formControlName="DtmFechaIngreso" matInput />
+              <mat-datepicker-toggle [for]="datepickerRef" class="block" matPrefix></mat-datepicker-toggle>
+              <mat-datepicker #datepickerRef></mat-datepicker>
+              <!--mat-error *ngIf="form.get('dtm_fecha_ingreso').hasError('required')">La fecha de ingreso es requerida.</mat-error-->
+            </mat-form-field>
+          </div>
+
+          <div class="flex flex-col sm:flex-row">
+            <mat-form-field class="mt-0 flex-auto">
+              <mat-label>Notas</mat-label>
+              <textarea formControlName="StrNotas" matInput oninput="this.value = this.value.toUpperCase()"></textarea>
+              <!--mat-error *ngIf="form.get('str_notas').touched && form.get('str_notas').hasError('minlength')">Las notas mínimo deben contener 2 caracteres.</mat-error>
+              <mat-error *ngIf="form.get('str_notas').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('str_notas').hasError('invalidnotas')">Las notas cumplen con el formato.</mat-error-->
+            </mat-form-field>
+          </div>
+        </mat-tab>
+        <!--Fin pestaña Datos Generales-->
+
+        <!-- PESTAÑA 2:  columnas de informacion  -->
+        <mat-tab label="Informacion">
+          <ng-template mat-tab-label>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+              <mat-icon [icIcon]="icColumnas" color="primary"></mat-icon>
+              <span>Columnas visibles</span>
+            </div>
+          </ng-template>
+          <!-- CONTROLES DE: DATOS GENERALES -->
+          <div class="flex-row mt-3">
+            <!-- Lista de columnas seleccionables -->
+            <div id="global" fxFlex="40">
+              <div fxLayout="column" formGroupName="opciones">
+                <!--mat-error *ngIf="form.get('opciones').get('int_id_opcion').hasError('required')">Selecciona al menos una opción.</mat-error-->
+                <mat-selection-list formControlName="IntIdOpcion" #columns
+                  (selectionChange)="onSelectionCols($event, columns.selectedOptions.selected)">
+                  <mat-list-option *ngFor="let col of arrColumsOpcions" [value]="col.id">
+                    {{ col.strOpcion }}
+                  </mat-list-option>
+                </mat-selection-list>
+              </div>
+            </div>
+            <!-- Bagdge y chips -->
+            <div class="flex-row" fxFlex="60">
+              <!-- badge -->
+              <div class="flex-col mt-0">
+                <div class="circulo flex-col mt-2">
+                  <h2>{{columnsSelected}} </h2>
+                </div>
+              </div>
+              <!-- chip -->
+              <div class="flex-col mt-2">
+                <div id="chip" class="flex-row ml-5">
+                  <mat-chip-list class="mt-1" aria-label="Fish selection">
+                    <div *ngFor="let sel of checkedValues; let i = index">
+                      <mat-chip at-chip color="secondary" selected>{{sel}}</mat-chip>
+                    </div>
+                  </mat-chip-list>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <!-- PESTAÑA: Licencias -->
+        <mat-tab label="Licencias">
+          <ng-template mat-tab-label>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+              <mat-icon [icIcon]="icLicencias" color="primary"></mat-icon>
+              <span>Licencias Agentes</span>
+            </div>
+          </ng-template>
+          <div class="flex flex-col sm:flex-row">
+            <!-- Numero de licencias -->
+            <mat-form-field class="sm:mt-5 " fxFlex="20">
+              <mat-label>Cantidad</mat-label>
+              <input #iptCantidad cdkFocusInitial formControlName="IntLicencias" matInput readonly="true" />
+              <!--(blur)="onBlurCantidad($event, iptCantidad.value)"-->
+              <mat-icon [icIcon]="icNoLicencias" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error *ngIf="form.get('int_licencias').touched && form.get('int_licencias').hasError('required')">La cantidad de licencias es requerida.</mat-error>
+              <mat-error *ngIf="form.get('int_licencias').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('int_licencias').hasError('invalidnlicencias')">La cantidad de licencias no es valida.</mat-error-->
+            </mat-form-field>
+            <!-- Costo unitario -->
+            <mat-form-field class="mt-5 sm:ml-3" fxFlex="40">
+              <mat-label>Costo unitario</mat-label>
+              <input formControlName="DblCostoLicencia" matInput />
+              <mat-icon [icIcon]="icCosto" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              <!--mat-error *ngIf="form.get('dbl_costo_licencia').touched && form.get('dbl_costo_licencia').hasError('required')">El costo unitario es requerido.</mat-error>
+              <mat-error *ngIf="form.get('dbl_costo_licencia').hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+              <mat-error *ngIf="form.get('dbl_costo_licencia').hasError('invalidcostolicen')">El costo no cumple con el formato.</mat-error-->
+            </mat-form-field>
+            <!-- Fecha de activacion -->
+            <mat-form-field class="mt-5 sm:ml-3" fxFlex="40">
+              <mat-label>Fecha activación</mat-label>
+              <input [matDatepicker]="datepickerAct" formControlName="DtmFechaActivacionLicencia" matInput />
+              <mat-datepicker-toggle [for]="datepickerAct" class="block" matPrefix></mat-datepicker-toggle>
+              <mat-datepicker #datepickerAct></mat-datepicker>
+              <!--mat-error *ngIf="form.get('dtm_fecha_activacion_licencia').hasError('required')">La fecha de activación es requerida.</mat-error-->
+            </mat-form-field>
+
+          </div>
+
+          <!-- Separador de encabezado -->
+          <mat-divider class="text-border"></mat-divider>
+          <div class="bg-app-bar px-6 h-16 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <h5 class="headline mt-3" fxFlex="auto">
+              Cuentas de agentes
+            </h5>
+            <span fxFlex></span>
+            <button mat-mini-fab color="primary" mat-raised-button type="button" (click)="openDialogAdd()">
+              <ic-icon [icon]="icAdd" inline="true" size="30px"></ic-icon>
+            </button>
+          </div>
+          <mat-divider class="text-border"></mat-divider>
+
+          <div>
+            <table mat-table [dataSource]="arrCuentasTodoxCliente" class="mat-elevation-z8">
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="Cuenta">
+                <th mat-header-cell *matHeaderCellDef> Cuenta</th>
+                <td mat-cell *matCellDef="let element"> {{element?.email}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="ClaveAgente">
+                <th mat-header-cell *matHeaderCellDef> Clave de Agente </th>
+                <td mat-cell *matCellDef="let element"> {{element?.strClaveAgente}} </td>
+              </ng-container>
+
+              <!-- Weight Column -->
+              <ng-container matColumnDef="Acciones">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  <button (click)="editLicencias(element, i ,mode)" mat-icon-button type="button" title="Editar">
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                  </button>
+                  <ng-container *ngIf="modoCrear(); else elseTemplate">
+
+                  </ng-container>
+                  <ng-template #elseTemplate>
+                    <button (click)="mtdclickEditarCuenta(element, i ,mode)" mat-icon-button type="button"
+                      title="Editar contraseña" [disabled]="!element.id">
+                      <mat-icon [icIcon]="icLock"></mat-icon>
+                    </button>
+                  </ng-template>
+                  <button (click)="mtdclickEliminarCuenta(element, i ,mode);" mat-icon-button type="button"
+                    title="Eliminar">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <!-- Symbol Column -->
+              <!--ng-container matColumnDef="Acciones">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let element"> 
+                  <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: element}" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                    <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                  </button>
+                </td>
+              </ng-container-->
+
+              <tr mat-header-row *matHeaderRowDef="LicenciasColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: LicenciasColumns;"></tr>
+            </table>
+
+          </div>
+
+          <!--<table class="mat-elevation-z8" mat-table [dataSource]="arrCuentasTodoxCliente" class="mat-elevation-z8">
+
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Num. </th>
+              <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+            </ng-container>
+
+            
+            <ng-container matColumnDef="Cuenta Agente">
+              <th mat-header-cell *matHeaderCellDef class="colmnasA">Cuenta Agente</th>
+              <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Clave Agente">
+              <th mat-header-cell *matHeaderCellDef>Clave Agente</th>
+              <td mat-cell *matCellDef="let element"> {{ element.strClaveAgente }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="edit">
+              <th *matHeaderCellDef mat-header-cell>Editar</th>
+              <td mat-cell *matCellDef="let element">
+                <button (click)="editLicencias(element, i ,mode)" mat-icon-button type="button" >
+                  <mat-icon [icIcon]="icEdit"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th *matHeaderCellDef mat-header-cell>Acciones</th>
+              <td mat-cell *matCellDef="let element" class="w-10 text-secondary">
+                <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ customer: element}" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                  <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+          </table>-->
+          <!--<div formArrayName="cuentas" *ngFor = "let cuenta of cuentas.controls; let i = index">
+             Cuenta 
+            <div  class="flex flex-col sm:flex-row" [formGroupName]="i">
+              <mat-form-field class="mt-0 flex-auto">
+                <mat-label>Cuenta</mat-label>
+                <input #Email formControlName="Email" matInput (blur)="onBlurEmail(Email.value);"/>
+                <mat-icon
+                  [icIcon]="icCuenta"
+                  class="ltr:mr-3 rtl:ml-3"
+                  matPrefix
+                ></mat-icon>
+                mat-error *ngIf="cuenta.get('Email')?.touched && cuenta.get('Email')?.hasError('required')">El email del cliente es requerido.</mat-error>
+                <mat-error *ngIf="cuenta.get('Email')?.hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+                <mat-error *ngIf="cuenta.get('Email')?.hasError('invalidemail')">El email no cumple con el formato.</mat-error
+              </mat-form-field>
+               Contraseña 
+              <mat-form-field class="sm:mt-0 sm:ml-3 flex-auto">
+                <mat-label>Contraseña</mat-label>
+                <input [type]="inputType" #PasswordHash formControlName="PasswordHash" matInput readonly/>
+                <mat-icon
+                  [icIcon]="icPass"
+                  class="ltr:mr-3 rtl:ml-3"
+                  matPrefix
+                ></mat-icon>
+                <button *ngIf="mode !== 'update'" (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button">
+                  <mat-icon *ngIf="visible"  class="mr-3"  matPrefix [icIcon]="icVisibility"></mat-icon>
+                  <mat-icon *ngIf="!visible" class="mr-3"  matPrefix [icIcon]="icVisibilityOff"></mat-icon>
+                </button>
+                <mat-error *ngIf="cuenta.get('PasswordHash')?.hasError('pdwValid')">La contraseña debe de tener mínimo 8 caracteres en esos debe contener letras mayúsculas, minúsculas, números y caracteres *,!,$,%,?,+,etc..</mat-error>
+              </mat-form-field>
+               Clave agente 
+              <mat-form-field class="sm:mt-0 sm:ml-3 flex-auto">
+                <mat-label>Clave agente</mat-label>
+                <input formControlName="StrClaveAgente" matInput />
+                <mat-icon [icIcon]="icIdentity" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+              </mat-form-field>
+              <button class="ml-6" color="primary" *ngIf="mode === 'update'" fxFlex="none" mat-mini-fab matTooltip="Editar Contraseña" type="button" (click)="mtdclickEditarCuenta( Email.value );">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+              </button>
+              <button class="ml-6" color="primary" *ngIf="mode === 'update'" fxFlex="none" mat-mini-fab matTooltip="Desactivar Cuenta" type="button" (click)="mtdclickEliminarCuenta( Email.value );">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+              </button>
+            </div>
+          </div>-->
+          <br>
+          <p class="p-nc" *ngIf="mode === 'update'">La contraseña solo puede cambiarse en el boton de edición</p>
+        </mat-tab>
+
+        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+          <ng-template let-customer="customer" matMenuContent>
+
+            <!--<button  mat-menu-item (click)="editLicencias(customer, mode)">
+              <mat-icon [icIcon]="icEdit"></mat-icon>
+              <span>Modificar</span>
+            </button>-->
+
+            <button *ngIf="modoActualizar" mat-menu-item (click)="mtdclickEditarCuenta(customer.email);">
+              <mat-icon [icIcon]="icLock"></mat-icon>
+              <span>Cambiar contraseña</span>
+            </button>
+
+            <button mat-menu-item (click)="mtdclickEliminarCuenta(customer.email);">
+              <mat-icon [icIcon]="icDelete"></mat-icon>
+              <span>Eliminar</span>
+            </button>
+
+          </ng-template>
+        </mat-menu>
+
+        <!-- Tarifas -->
+        <mat-tab label="Tarifas" formGroupName="tarifas">
+          <ng-template mat-tab-label>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+              <mat-icon [icIcon]="icTarifas" color="primary"></mat-icon>
+              <span>Tarifas</span>
+            </div>
+          </ng-template>
+          <div fxLayout="column" *ngFor="let tarifa of form.get('tarifas')['controls']; let i = index;">
+            <div fxLayout="column" [formGroupName]="i">
+              <!-- Tarifa minima -->
+              <mat-divider class="text-border"></mat-divider>
+              <h4 class="headline mt-3" fxFlex="auto">
+                Tarifa minima
+              </h4>
+              <mat-divider class="text-border"></mat-divider>
+              <div class="flex flex-col sm:flex-row">
+                <mat-form-field class="mt-5 sm:ml-3" fxFlex="50">
+                  <mat-label>Costo</mat-label>
+                  <input matInput formControlName="FltTarifaMin" #strCostoTarifaMinima />
+                  <mat-icon [icIcon]="icCosto" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+                  <!--mat-error *ngIf="tarifa.get('flt_tarifa_min')?.touched && tarifa.get('flt_tarifa_min')?.hasError('required')">El costo de tarifa minima es requerido.</mat-error>
+                  <mat-error *ngIf="tarifa.get('flt_tarifa_min')?.hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+                  <mat-error *ngIf="tarifa.get('flt_tarifa_min')?.hasError('invalidcostotarifa')">El costo de tarifa minima no es valido.</mat-error-->
+                </mat-form-field>
+                <mat-form-field class="mt-5 sm:ml-3" fxFlex="50">
+                  <mat-label>Minutos</mat-label>
+                  <input matInput formControlName="IntTiempoMinimo" #intCantidadMinutosMinima />
+                  <mat-icon [icIcon]="icTiempo" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+                  <!--mat-error *ngIf="tarifa.get('int_tiempo_minimo')?.touched && tarifa.get('int_tiempo_minimo')?.hasError('required')">La cantidad de minutos es requerida.</mat-error>
+                  <mat-error *ngIf="tarifa.get('int_tiempo_minimo')?.hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+                  <mat-error *ngIf="tarifa.get('int_tiempo_minimo')?.hasError('invalidminutos')">La cantidad de minutos no es valida.</mat-error-->
+                </mat-form-field>
+              </div>
+              <!-- Tarifa máxima -->
+              <mat-divider class="text-border"></mat-divider>
+              <h4 class="headline mt-3" fxFlex="auto">
+                Tarifa máxima
+              </h4>
+              <mat-divider class="text-border"></mat-divider>
+              <div class="flex flex-col sm:flex-row">
+                <mat-form-field class="mt-5 sm:ml-3" fxFlex="50">
+                  <mat-label>Costo</mat-label>
+                  <input matInput formControlName="FltTarifaMax" #strCostoTarifaMaxima />
+                  <mat-icon [icIcon]="icCosto" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+                  <!--mat-error *ngIf="tarifa.get('flt_tarifa_max')?.touched && tarifa.get('flt_tarifa_max')?.hasError('required')">El costo de tarifa máxima es requerido.</mat-error>
+                  <mat-error *ngIf="tarifa.get('flt_tarifa_max')?.hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+                  <mat-error *ngIf="tarifa.get('flt_tarifa_max')?.hasError('invalidcostotarifa')">El costo de tarifa máxima no es valido.</mat-error-->
+                </mat-form-field>
+                <mat-form-field class="mt-5 sm:ml-3" fxFlex="50">
+                  <mat-label>Minutos</mat-label>
+                  <input matInput formControlName="IntTiempoMaximo" #intCantidadMinutosMaxima />
+                  <mat-icon [icIcon]="icTiempo" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+                  <!--mat-error *ngIf="tarifa.get('int_tiempo_maximo')?.touched && tarifa.get('int_tiempo_maximo')?.hasError('required')">La cantidad de minutos es requerida.</mat-error>
+                  <mat-error *ngIf="tarifa.get('int_tiempo_maximo')?.hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+                  <mat-error *ngIf="tarifa.get('int_tiempo_maximo')?.hasError('invalidminutos')">La cantidad de minutos no es valida.</mat-error-->
+                </mat-form-field>
+              </div>
+              <!-- Intervalo -->
+              <mat-divider class="text-border"></mat-divider>
+              <h4 class="headline mt-3" fxFlex="auto">
+                Intervalo
+              </h4>
+              <div class="flex flex-col sm:flex-row">
+                <mat-form-field class="mt-5 sm:ml-3" fxFlex="50">
+                  <mat-label>Costo</mat-label>
+                  <input matInput formControlName="FltTarifaIntervalo" #strCostoTotal readonly />
+                  <mat-icon [icIcon]="icCosto" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+                  <mat-error *ngIf="tarifa.get('FltTarifaIntervalo')?.hasError('formatodecimal')">El costo de tarifa no
+                    es valido.</mat-error>
+                </mat-form-field>
+                <mat-form-field class="mt-5 sm:ml-3" fxFlex="50">
+                  <mat-label>Minutos</mat-label>
+                  <input matInput formControlName="IntIntervaloMinutos" #intMinutosCantidad (blur)="mtdonBlurCosto( intCantidadMinutosMinima.value,
+                                                strCostoTarifaMinima.value,
+                                                intCantidadMinutosMaxima.value,
+                                                strCostoTarifaMaxima.value,
+                                                intMinutosCantidad.value  
+                                              );" />
+                  <mat-icon [icIcon]="icTiempo" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+                  <!--mat-error *ngIf="tarifa.get('int_intervalo_minutos')?.touched && tarifa.get('int_intervalo_minutos')?.hasError('required')">La cantidad de minutos es requerida.</mat-error>
+                  <mat-error *ngIf="tarifa.get('int_intervalo_minutos')?.hasError('invalidespacios')">El campo no cumple con el formato.</mat-error>
+                  <mat-error *ngIf="tarifa.get('int_intervalo_minutos')?.hasError('invalidminutos')">La cantidad de minutos no es valida.</mat-error-->
+                </mat-form-field>
+              </div>
+              <div class="flex flex-col sm:flex-row">
+                <mat-form-field class="mt-5 sm:ml-3" fxFlex="50">
+                  <mat-label>Intervalos</mat-label>
+                  <input matInput formControlName="int_intervalo_numero" #intNumeroIntervalos />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <!-- Tarifario -->
+          <mat-divider class="text-border"></mat-divider>
+          <h4 class="headline mt-3" fxFlex="auto">
+            Tarifario
+          </h4>
+          <table class="mat-elevation-z8" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <!-- Position Column -->
+            <ng-container matColumnDef="Concepto">
+              <th mat-header-cell *matHeaderCellDef>Concepto</th>
+              <td mat-cell *matCellDef="let element"> {{ element.concepto }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Inicio">
+              <th mat-header-cell *matHeaderCellDef>Inicio</th>
+              <td mat-cell *matCellDef="let element"> {{ element.inicio }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Fin">
+              <th mat-header-cell *matHeaderCellDef>Fin</th>
+              <td mat-cell *matCellDef="let element"> {{ element.fin }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Unidad">
+              <th mat-header-cell *matHeaderCellDef>Unidad</th>
+              <td mat-cell *matCellDef="let element"> {{ element.unidad }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Tiempo">
+              <th mat-header-cell *matHeaderCellDef>Tiempo</th>
+              <td mat-cell *matCellDef="let element"> {{ element.tiempo }} </td>
+            </ng-container>
+            <ng-container matColumnDef="P/U">
+              <th mat-header-cell *matHeaderCellDef>P/U</th>
+              <td mat-cell *matCellDef="let element"> {{ element.PU }} </td>
+            </ng-container>
+            <ng-container matColumnDef="Costo">
+              <th mat-header-cell *matHeaderCellDef>Costo</th>
+              <td mat-cell *matCellDef="let element"> {{ element.costo }} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-tab>
+
+        <!-- Más opciones por agregar -->
+        <!--mat-tab label="Two">
+          <h1>Some more tab content</h1>
+          <p>...</p>
+        </mat-tab-->
+      </mat-tab-group>
+    </div>
+    <hr />
+    <!--pre>
+      Estado del formulario: {{ form.valid }}
+      <br/>
+      Status del formulario: {{ form.status }}
+    </pre>
+    <pre>
+      {{ form.value | json }}
+    </pre-->
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">CANCELAR</button>
+    <button *ngIf="modoCrear();" color="primary" mat-button type="submit">GUARDAR</button>
+    <button *ngIf="modoActualizar();" color="primary" mat-button type="submit">ACTUALIZAR CLIENTE</button>
+  </mat-dialog-actions>
+</form>
+
+<mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
+  <button mat-menu-item (click)="mtdonClickExportar($event);">
+    <mat-icon [icIcon]="icDownload"></mat-icon>
+    <span>Exportar</span>
+  </button>
+
+  <!--button mat-menu-item (click)="mtdonClickExportar($event);">
+    <mat-icon [icIcon]="icDownload"></mat-icon>
+    <span>Exportar</span>
+  </button-->
+
+  <button mat-menu-item (click)="mtdonClickEliminarClient($event);">
+    <mat-icon [icIcon]="icDelete"></mat-icon>
+    <span>Borrar</span>
+  </button>
+</mat-menu>

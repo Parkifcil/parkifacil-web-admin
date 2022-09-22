@@ -1,0 +1,254 @@
+<vex-secondary-toolbar current="Dashboard" class="input">
+  <vex-breadcrumbs [crumbs]="['Dashboard']" class="flex-auto"></vex-breadcrumbs>
+  <!-- Botón de filtro -->
+  <!-- <button
+      [matMenuTriggerFor]="filtroPeriodo"
+      class="ml-2"
+      fxFlex="none"
+      color="primary"
+      mat-icon-button
+      matTooltip="Filtrar por periodo"
+      type="button"
+    >
+      <mat-icon [icIcon]="icFilterList"></mat-icon>
+    </button> -->
+</vex-secondary-toolbar>
+
+<!-- Contenedor del Dashboard -->
+<div
+  class="p-gutter"
+  gdColumns="1fr 1fr 1fr"
+  gdColumns.lt-md="1fr 1fr"
+  gdColumns.lt-sm="1fr"
+  gdGap="16px"
+  vexContainer
+>
+  <!-- Resumen del Dashboard -->
+  <!-- <vex-widget-assistant
+    gdColumn="1 / 3"
+    gdColumn.lt-md="1 / -1"
+    gdColumn.lt-sm="1"
+  >
+  </vex-widget-assistant> -->
+  <!-- <mat-card gdColumn="1/4">
+    <div
+      class="w-full flex justify-end items-center content-center flex-col md:flex-row"
+    >
+      
+      <mat-form-field class="mr-3 input">
+        <mat-label>Inicio</mat-label>
+        <input 
+          matInput 
+          [matDatepicker]="datepickerRefi" 
+          #fechaInicio 
+          (dateChange)="mtdchangeobtenerMovimientosxPeriodos(fechaInicio.value, fechaFin.value)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="datepickerRefi"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #datepickerRefi></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="mr-3 input">
+        <mat-label>Fin</mat-label>
+        <input
+          matInput
+          [matDatepicker]="datepickerRefe"
+          #fechaFin
+          (dateChange)="mtdchangeobtenerMovimientosxPeriodos(fechaInicio.value, fechaFin.value)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="datepickerRefe"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #datepickerRefe></mat-datepicker>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        type="button"
+        color="theme.colors.primary"
+        class="mat-focus-indicator mat-raised-button mat-button-base mat-secondary mb-3 md:mb-0 md:mr-3 w-7/12 md:w-auto"
+        (click)="mtdchangeobtenerMovimientosxPeriodos(fechaInicio.value, fechaFin.value)"
+      >
+        Actualizar
+      </button>
+      <button
+        mat-raised-button
+        type="button"
+        color="theme.colors.primary"
+        (click)="descargarInforme(fechaInicio.value, fechaFin.value)"
+        class="mat-focus-indicator mat-raised-button mat-button-base mat-primary mb-3 md:mb-0 w-7/12 md:w-auto"
+      >
+        Descargar informe
+      </button>
+    </div>
+  </mat-card> -->
+
+  <!-- Ingresos SEMANALES Android -->
+  <vex-widget-quick-line-chart
+    [icon]="icAndroid"
+    [options]="ingresosSemanalesAndroidChartOptions"
+    [series]="pageViewsSeries"
+    [color]="theme.colors.primary"
+    gdColumn="1 / 1"
+    gdColumn.lt-md="1 / 1"
+    gdColumn.lt-sm="1"
+    label="Semanal Android"
+    value="{{ dbltotalsemanalAndroid | currency: 'MXN' }}"
+  >
+  </vex-widget-quick-line-chart>
+  <!-- Ingresos SEMANALES IOS -->
+  <vex-widget-quick-line-chart
+    [icon]="icIOS"
+    [options]="ingresosSemanalesIOSChartOptions"
+    [series]="uniqueUsersSeries"
+    [color]="theme.colors.orange"
+    gdColumn="2 / 2"
+    gdColumn.lt-md="2 / 2"
+    gdColumn.lt-sm="1"
+    gdRow.lt-sm="3"
+    label="Semanal IOS"
+    value="{{ dbltotalsemanalIos | currency: 'MXN' }}"
+  >
+  </vex-widget-quick-line-chart>
+  <!-- Ingresos TOTALES Semana -->
+  <vex-widget-quick-value-center
+    [value]="arringresosTotales.dbl_total_ac_semana | currency: 'MXN'"
+    [change]="arringresosTotales.int_porcentaje_semana"
+    [leyenda]="arringresosTotales.dbl_total_ant_semana | currency: 'MXN'"
+    [icon]="icWeek"
+    [color]="theme.colors.primary"
+    gdColumn="3 / 3"
+    gdColumn.lt-md="2 / 1"
+    gdColumn.lt-sm="1"
+    gdRow.lt-md="3 / 3"
+    gdRow.lt-sm="5"
+    label="Total Ac. Semana"
+  ></vex-widget-quick-value-center>
+
+  <!-- Ingresos del DIA Andorid -->
+  <vex-widget-quick-value-center
+    [value]="arringresosTotales.dblIngresosDiaAndriod | currency: 'MXN'"
+    [change]="arringresosTotales.int_porcentaje_andriod"
+    [leyenda]="arringresosTotales.dbl_total_ant_andriod | currency: 'MXN'"
+    [icon]="icAndroid"
+    [color]="theme.colors.primary"
+    gdColumn.lt-sm="1"
+    gdRow.lt-sm="2"
+    label="Ingresos del dia Android"
+  >
+  </vex-widget-quick-value-center>
+  <!-- Ingresos del DIA IOS -->
+  <vex-widget-quick-value-center
+    [value]="arringresosTotales.dblIngresosDiaIOS | currency: 'MXN'"
+    [change]="arringresosTotales.int_porcentaje_IOS"
+    [leyenda]="arringresosTotales.dbl_total_ant_IOS | currency: 'MXN'"
+    [icon]="icIOS"
+    [color]="theme.colors.orange"
+    gdColumn.lt-sm="1"
+    label="Ingresos del dia IOS"
+  ></vex-widget-quick-value-center>
+  <!-- Ingresos TOTALES Dia -->
+  <vex-widget-quick-value-center
+    [value]="arringresosTotales.dbl_total_del_dia | currency: 'MXN'"
+    [change]="arringresosTotales.int_porcentaje_total"
+    [leyenda]="arringresosTotales.dbl_total_dia_ant | currency: 'MXN'"
+    [icon]="icDay"
+    [color]="theme.colors.primary"
+    gdColumn.lt-sm="1"
+    label="Total del Dia"
+  >
+  </vex-widget-quick-value-center>
+</div>
+<div
+  class="p-gutter"
+  gdColumns="1fr 1fr 1fr 1fr"
+  gdColumns.lt-md="1fr 1fr"
+  gdColumns.lt-sm="1fr"
+  gdGap="16px"
+  vexContainer
+>
+  <!-- Comparativa de ingresos -->
+  <vex-widget-large-chart
+    [title]="traNtitulo2"
+    subtitle="Android: {{ traNsubtitulo | currency: 'MXN' }}"
+    subtitle2="IOS: {{ traNsubtitulo2 | currency: 'MXN' }}"
+    subtitle3="Total: {{ traNsubtitulo3 | currency: 'MXN' }}"
+    [(series)]="userSessionsSeries2"
+    gdColumn="1 / 3"
+    gdColumn.lt-md="1 / -1"
+    gdColumn.lt-sm="2"
+  >
+  </vex-widget-large-chart>
+  <!-- Numero de operaciones por plataforma -->
+  <vex-widget-large-chart
+    [title]="titulo"
+    subtitle="Android: {{ subtitulo }}"
+    subtitle2="IOS: {{ subtitulo2 }}"
+    subtitle3="Total: {{ subtitulo3 }}"
+    [series]="userSessionsSeries"
+    gdColumn="3 / -1"
+    gdColumn.lt-md="1 / -1"
+    gdColumn.lt-sm="2"
+  >
+  </vex-widget-large-chart>
+  <!--Resumen de ingresos -->
+  <vex-widget-large-goal-chart
+    [series]="salesSeries"
+    gdColumn="1 / -1"
+    gdColumn.lt-sm="1"
+    [total]="dbltotalmensual"
+    [leyenda]="dblporcentajemensual"
+    [leyenda2]="intporcentajetrasaccionmensual"
+  >
+  </vex-widget-large-goal-chart>
+</div>
+
+<mat-menu
+  #filtroPeriodo="matMenu"
+  class="p-4 flex flex-col"
+  overlapTrigger="false"
+>
+  <p class="font-medium mb-2">Filtro por periodo</p>
+  <mat-form-field class="w-full">
+    <mat-label>Inicio</mat-label>
+    <input matInput [matDatepicker]="datepickerRefi" #fechaInicio />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="datepickerRefi"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #datepickerRefi></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Fin</mat-label>
+    <input
+      matInput
+      [matDatepicker]="datepickerRefe"
+      #fechaFin
+
+    />
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="datepickerRefe"
+    ></mat-datepicker-toggle>
+    <mat-datepicker #datepickerRefe></mat-datepicker>
+  </mat-form-field>
+  <button
+    mat-raised-button
+    type="button"
+    class="mat-focus-indicator mat-raised-button mat-button-base mb-3 w-full"
+  >
+    Actualizar
+  </button>
+  <button
+    mat-raised-button
+    type="button"
+    color="primary"
+    class="mat-focus-indicator mat-raised-button mat-button-base mb-3 w-full mb-0"
+  >
+    Descargar informe
+  </button>
+</mat-menu>

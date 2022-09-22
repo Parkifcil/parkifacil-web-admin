@@ -1,0 +1,71 @@
+<form [formGroup]="form">
+    <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+        <h2 *ngIf="data !== null && data.modo !== 'update'" class="headline m-0" fxFlex="auto">
+            Nuevo Agente
+        </h2>
+
+        <h2  *ngIf="data !== null && data.modo == 'update'" class="headline m-0" fxFlex="auto">
+            Editar agente
+        </h2>
+
+        <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+
+    <mat-dialog-content fxLayout="column">
+
+        <div class="flex flex-col sm:flex-row">
+
+            <mat-form-field class="mt-6 flex-auto">
+                <mat-label>Cuenta</mat-label>
+                <input cdkFocusInitial #email  formControlName="email" name="email" matInput required>
+                <mat-icon [icIcon]="icEmail" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="this.form.get('email').hasError('emailInValid')">Ingrese un email valido</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="flex flex-col sm:flex-row">
+            <mat-form-field class="mt-6 flex-auto">
+                <mat-label>Contraseña</mat-label>
+                <input [type]="inputType" cdkFocusInitial #passwordHash formControlName="passwordHash" name="passwordHash" matInput minlength="8" maxlength="16" required/>
+                <mat-icon [icIcon]="icLock" class="mr-3" matPrefix></mat-icon>
+
+                <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button" [disabled]="data?.cuenta?.id">
+                    <mat-icon *ngIf="visible"  class="mr-3"  matPrefix [icIcon]="icVisibility"></mat-icon>
+                    <mat-icon *ngIf="!visible" class="mr-3"  matPrefix [icIcon]="icVisibilityOff"></mat-icon>
+                </button>
+
+                <mat-error *ngIf="form.get('passwordHash').touched && form.get('passwordHash')?.hasError('required')">La contraseña es requerida</mat-error>
+                <mat-error *ngIf="form.get('passwordHash').touched && form.get('passwordHash')?.hasError('minlength')">La contraseña debe de tener minímo 8 caracteres</mat-error>
+                <mat-error *ngIf="form.get('passwordHash').touched && form.get('passwordHash')?.hasError('maxlength')">La contraseña debe de tener maxímo 16 caracteres</mat-error>
+                <hr>
+                 <mat-hint>Haga clic en el ojo para alternar la visibilidad.</mat-hint>
+                
+            </mat-form-field>
+        </div>
+
+        <div class="flex flex-col sm:flex-row">
+            <mat-form-field class="mt-6 flex-auto">
+                <mat-label>Clave Agente</mat-label>
+                <input cdkFocusInitial #strClaveAgente formControlName="strClaveAgente" name="strClaveAgente" matInput  required>
+                <mat-icon [icIcon]="icPeople" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="form.get('strClaveAgente').hasError('required')">La Clave de agente es requerida</mat-error>
+            </mat-form-field>
+        </div>
+        <hr>
+        <!--p class="p-nc" *ngIf="modo === 'update'">La contraseña solo puede cambiarse en el boton de edición en el menu de acciones</p-->
+
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close type="button">CANCELAR</button>
+        <button *ngIf="data.modo !== 'update'" color="primary" mat-button type="button" (click)="save(email.value, passwordHash.value, strClaveAgente.value, isClose)" >GUARDAR</button>
+        <button *ngIf="data?.modo == 'update'" color="primary" mat-button type="button" (click)="save(email.value, passwordHash.value, strClaveAgente.value, isClose)">ACTUALIZAR</button>
+    </mat-dialog-actions>
+
+</form>

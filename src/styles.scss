@@ -1,0 +1,46 @@
+@import "~simplebar/dist/simplebar.css";
+@import "~highlight.js/styles/androidstudio.css";
+// Vex Core
+@import "./@vex/styles/core";
+
+/*
+  You can override any CSS Variable or style here
+  Example:
+
+  :root {
+   --sidenav-background: #333333;
+  }
+
+  All possible variables can be found in @vex/styles/core or by simply inspecting the element you want to change
+  in Chrome/Firefox DevTools
+*/
+
+/**
+  Uncomment the below code and adjust the values to fit your colors, the application will automatically adjust
+ */
+ /**
+  Se modificaron los estilos principales de la plantilla para cambiar el tema azul por defecto
+ */
+:root {
+  --color-primary: 102, 168, 220;
+  --color-primary-contrast: 255, 255, 255;
+
+   .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+      border-color:rgb(73, 75, 116);
+    }
+    
+    .mat-radio-button.mat-accent .mat-radio-inner-circle{
+      color:rgb(92, 119, 255);
+      background-color:rgb(92, 119, 255) ;
+    }
+    
+    .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+        background-color:rgb(92, 119, 255);
+    }
+
+   //--color-accent:rgb(73, 75, 116);
+  // --color-accent-contrast: black;
+
+  // --color-warn: yellow;
+  // --color-warn-contrast: black;
+}

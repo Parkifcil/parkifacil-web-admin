@@ -1,0 +1,52 @@
+<form [formGroup]="form">
+    <!-- Encabezazdo de ventana -->
+    <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+        <h2 class="headline m-0" fxFlex="auto">Localización del cliente</h2>
+        <!-- Este es el boton de cerrar del popup -->
+        <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+     <!-- Contenedor  -->
+     <mat-dialog-content fxLayout="column" style="min-height: fit-content;">
+        <div class="flex flex-col sm:flex-row" style="margin-top: 5px;">
+           <!-- Latitud  -->
+           <mat-form-field class="mt-0 flex-auto">
+            <mat-label>Latitud</mat-label>
+            <input #strLatitud matInput formControlName="strLatitud" />
+            <mat-icon
+              [icIcon]="icLocalizacion"
+              class="ltr:mr-3 rtl:ml-3"
+              matPrefix
+          ></mat-icon>
+          </mat-form-field>
+          <!-- Longitud  -->
+          <mat-form-field class="sm:mt-0 sm:ml-3 flex-auto">
+            <mat-label>Longitud</mat-label>
+            <input #strLongitud matInput formControlName="strLongitud" />
+            <mat-icon
+              [icIcon]="icLocalizacion"
+              class="ltr:mr-3 rtl:ml-3"
+              matPrefix
+          ></mat-icon>
+          </mat-form-field>
+        </div>
+        <!-- Renglon Mapa -->
+        <div class="flex flex-col sm:flex-row ">
+            <!-- Mapa -->
+            <div style="width: 600px; height: 600px;" id="map"></div>
+        </div>
+        <!--Fin renglon Mapa -->
+    </mat-dialog-content> 
+    <!-- Fin contenedor -->
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close type="button">CANCELAR</button>
+        <button color="primary" mat-button type="button" (click)="mtdClickAgregarCoor(
+                                                                                        strLatitud.value,
+                                                                                        strLongitud.value
+                                                                                        )">AGREGAR</button>
+    </mat-dialog-actions>
+</form>

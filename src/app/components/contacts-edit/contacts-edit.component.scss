@@ -1,0 +1,77 @@
+#global {
+  height: 520px;
+  width: 300px;
+  border: 1px solid #ddd;
+  overflow-y: scroll;
+}
+
+#chip {
+  height: 450px;
+  //width: 400;
+  background-color: rgba($color: #EBEBEE, $alpha: 0.7);
+  border-radius: 16px 16px 16px 16px;
+  -moz-border-radius: 16px 16px 16px 16px;
+  -webkit-border-radius: 16px 16px 16px 16px;
+  border: 1px solid #FF5722;
+  overflow-y: scroll;
+}
+
+.circulo {
+	width: 1rem;
+	height: 1rem;
+	border-radius: 50%;
+	background: #494B74;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+  margin:0px auto;
+  padding:3%
+}
+
+.circulo > h2 {
+	font-family: sans-serif;
+	color: white;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+#mensajes {
+  height: auto;
+}
+.texto {
+  padding: 4px;
+  background: #fff;
+}
+
+.form_error{
+  text-align: justify;
+}
+
+/**
+estilo de la tabla del tarifario
+*/
+table {
+  width: 100%;
+}
+
+/*th.mat-header-cell,
+td.mat-cell {
+  text-align: center;
+}
+
+th.mat-header-column,
+td.mat-column {
+  width: 200px;
+}*/
+
+/*
+estilo del parrafo de notificación de cambio de contraseña
+*/
+.p-nc {
+  text-align: left;
+}
+
+.colmnasA {
+  width: 150px;
+}

@@ -1,0 +1,32 @@
+<form (ngSubmit)="update()" [formGroup]="form">
+    <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+        <h2 class="headline m-0" fxFlex="auto">{{this.defaults.strNombre + ' ' + this.defaults.strApellidos}}</h2>
+        <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+    <mat-dialog-content fxLayout="column">
+        <mat-form-field class="flex-auto">
+            <mat-label>Nueva contraseña</mat-label>
+
+            <input cdkFocusInitial [type]="inputType" formControlName="Password" name="Password" matInput minlength="8" required>
+            <mat-icon [icIcon]="icLock" class="mr-3" matPrefix></mat-icon>
+            <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button" >
+                <mat-icon *ngIf="visible"  class="mr-3"  matPrefix [icIcon]="icVisibility"></mat-icon>
+                <mat-icon *ngIf="!visible" class="mr-3"  matPrefix [icIcon]="icVisibilityOff"></mat-icon>
+            </button>
+            <mat-error *ngIf="passwordInvalido">Ingresa tu contraseña por favor</mat-error>
+            <mat-error *ngIf="pwdInvalida">La contraseña debe de tener mínimo 8 caracteres en esos debe contener letras mayúsculas, minúsculas, números y caracteres *,!,$,%,?,+,etc..</mat-error>
+            <mat-hint>
+                <hr> Haga clic en el ojo para alternar la visibilidad.
+            </mat-hint>
+            <hr>
+
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close type="button">CANCELAR</button>
+        <button [disabled]="!formularioValido" color="primary" mat-button type="submit">ACTUALIZAR CONTRASEÑA</button>
+    </mat-dialog-actions>
+</form>

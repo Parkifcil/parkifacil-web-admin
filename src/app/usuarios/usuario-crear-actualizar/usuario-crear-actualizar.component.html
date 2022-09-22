@@ -1,0 +1,213 @@
+<form (ngSubmit)="save()" [formGroup]="form">
+    <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+        <h2 *ngIf="form.get('UserName').value || form.get('UserName').value" class="headline m-0" fxFlex="auto">{{form.get('StrNombre').value + ' ' + form.get('StrApellidos').value }}</h2>
+        <h2 *ngIf="!form.get('UserName').value && !form.get('UserName').value" class="headline m-0" fxFlex="auto">Nuevo Usuario</h2>
+
+
+
+        <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+    </div>
+
+    <mat-divider class="-mx-6 text-border"></mat-divider>
+
+
+    <mat-dialog-content fxLayout="column">
+        <div class="flex flex-col sm:flex-row">
+
+            <mat-form-field class="mt-6 flex-auto">
+                <mat-label>Nombre</mat-label>
+                <input cdkFocusInitial formControlName="StrNombre" matInput oninput="this.value = this.value.toUpperCase()" required>
+                <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="form.get('StrNombre').hasError('espacios')">No ingrese solo espacios </mat-error>
+                <mat-error *ngIf="NombreInvalido">Ingrese un nombre valido por favor</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="sm:mt-6 sm:ml-6 flex-auto">
+                <mat-label>Apellidos</mat-label>
+                <input cdkFocusInitial formControlName="StrApellidos" matInput oninput="this.value = this.value.toUpperCase()" required>
+                <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="form.get('StrApellidos').hasError('sololetras')">Ingresa un apellido valido por favor </mat-error>
+                <mat-error *ngIf="form.get('StrApellidos').hasError('espacios')">No ingrese solo espacios </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row">
+
+            <mat-form-field class="mt-6 flex-auto">
+                <mat-label>RFC</mat-label>
+                <input cdkFocusInitial formControlName="StrRfc" oninput="this.value = this.value.toUpperCase()" matInput>
+                <mat-icon [icIcon]="icCollections_bookmark" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="rfcInvalido">Ingresar tu RFC es opcional </mat-error>
+                <mat-error *ngIf="form.get('StrRfc').hasError('rfcIn')">El RFC consta de 10 Caracteres</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="sm:mt-6 sm:ml-6 flex-auto">
+                <mat-label>Dirección</mat-label>
+                <input cdkFocusInitial formControlName="StrDireccion" matInput oninput="this.value = this.value.toUpperCase()" required>
+                <mat-icon [icIcon]="icExplore" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="direccInvalida">Ingresa tu dirección por favor </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row">
+            <mat-form-field class="mt-6 flex-auto">
+                <mat-label>Codigo Postal</mat-label>
+                <input cdkFocusInitial formControlName="StrCP" matInput oninput="this.value = this.value.toUpperCase()" required>
+                <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="cpInvalido">Ingresa tu codigo postal valido por favor </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="sm:mt-6 sm:ml-6 flex-auto">
+                <mat-label>Razon Social</mat-label>
+                <input cdkFocusInitial formControlName="StrRazonSocial" oninput="this.value = this.value.toUpperCase()" matInput>
+                <mat-icon [icIcon]="icBusiness" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="razonInvalida">Ingresar tu razon social es opcional </mat-error>
+                <mat-error *ngIf="this.form.get('StrRazonSocial').hasError('espaciosRazon')">No ingrese solo espacios por favor</mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row">
+
+            <mat-form-field class="mt-6 flex-auto">
+                <mat-label>Correo</mat-label>
+                <input #Email cdkFocusInitial formControlName="Email" matInput required (blur)="onBlurEmail(Email.value);">
+                <mat-icon [icIcon]="icEmail" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="this.form.get('Email').hasError('notMatched')">Este correo no se encuentra disponible </mat-error>
+                <mat-error *ngIf="this.form.get('Email').hasError('emailInValid')">Ingrese un email valido</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class=" sm:mt-6 sm:ml-6  flex-auto">
+                <mat-label>Usuario</mat-label>
+                <input #UserName cdkFocusInitial formControlName="UserName" matInput oninput="this.value = this.value.toUpperCase()" required (blur)="onBlurUser(UserName.value);">
+                <mat-icon [icIcon]="icPeople" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="this.form.get('UserName').hasError('notMatched')">Este nombre de usuario no se encuentra disponible </mat-error>
+                <mat-error *ngIf="this.form.get('UserName').hasError('userNameInvalido')">Ingresa el nombre de usuario por favor </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row">
+
+            <mat-form-field class=" mt-6 flex-auto">
+                <mat-label>Número Telefonico</mat-label>
+                <input cdkFocusInitial formControlName="PhoneNumber" matInput oninput="this.value = this.value.toUpperCase()" required>
+                <mat-icon [icIcon]="icPhone" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="telfonoInvalido">Ingresa un numero telefónico valido por favor </mat-error>
+            </mat-form-field>
+
+            <!-- // Modificar -->
+            <!-- <mat-form-field *ngIf="form.get('userName').value || form.get('userName').value" class="mt-6 flex-auto">
+                <mat-label for="usuarios">Seleciona Rol</mat-label>
+                <mat-select cdkFocusInitial id="usuarios" formControlName="rl" matSelect required>
+                    <mat-option *ngFor="let usuario of usuarios" [value]="usuario.id || usurio.strTipoUsuario">
+                        {{usuario.strTipoUsuario}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('rol').hasError('required')">Selecciona el tipo de usuario por favor </mat-error>
+            </mat-form-field> -->
+
+
+
+            <mat-form-field class="sm:mt-6 sm:ml-6 flex-auto">
+                <mat-label for="consesiones">Seleciona Concesión</mat-label>
+                <mat-select cdkFocusInitial id="consesiones" formControlName="IntIdconcesionId" matSelect required>
+                    <mat-option *ngFor="let concesion of arrConce" [value]=concesion.id>
+                        {{ concesion.strNombreCliente}}
+                    </mat-option>
+                </mat-select>
+                <mat-icon [icIcon]="icApps" class="mr-3" matPrefix></mat-icon>
+                <mat-error *ngIf="concesionInvalida">Selecciona una concesión por favor </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <mat-form-field class="flex-auto">
+            <mat-label for="ciudades">Seleciona una ciudad</mat-label>
+            <mat-select cdkFocusInitial id="ciudades" formControlName="IntIdCiudad" matSelect required>
+                <!-- <mat-select [(value)]="selected"></mat-select> -->
+                <mat-option *ngFor="let ciudad of ciudades" [value]=ciudad.id>
+                    {{ciudad.strCiudad}}
+                </mat-option>
+            </mat-select>
+            <mat-icon [icIcon]="icNavigation" class="mr-3" matPrefix></mat-icon>
+            <mat-error *ngIf="ciudadInvalida">Selecciona una ciudad por favor </mat-error>
+        </mat-form-field>
+
+
+        <!-- // Crear -->
+        <mat-form-field class="flex-auto">
+            <mat-label for="usuarios">Seleciona Rol</mat-label>
+            <mat-select cdkFocusInitial id="usuarios" formControlName="Rol" matSelect required>
+                <mat-option *ngFor="let usuario of arrTodos" [value]=usuario.strTipoUsuario>
+                    {{usuario.strTipoUsuario}}
+                </mat-option>
+            </mat-select>
+            <mat-icon [icIcon]="icAccount_circle" class="mr-3" matPrefix></mat-icon>
+            <mat-error *ngIf="rolInvalido">Selecciona el tipo de usuario por favor </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field class="flex-auto">
+            <mat-label>Contraseña</mat-label>
+
+            <input cdkFocusInitial [type]="inputType" formControlName="Password" name="Password" matInput minlength="8" required>
+            <mat-icon [icIcon]="icLock" class="mr-3" matPrefix></mat-icon>
+            <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Toggle Visibility" type="button" [disabled]="mode === 'actualizar'">
+        <mat-icon *ngIf="visible"  class="mr-3"  matPrefix [icIcon]="icVisibility"></mat-icon>
+        <mat-icon *ngIf="!visible" class="mr-3"  matPrefix [icIcon]="icVisibilityOff"></mat-icon>
+      </button>
+            <mat-error *ngIf="passwordInvalido">Ingresa tu contraseña por favor</mat-error>
+            <mat-error *ngIf="pwdInvalida">La contraseña debe de tener mínimo 8 caracteres en esos debe contener letras mayúsculas, minúsculas, números y caracteres *,!,$,%,?,+,etc..</mat-error>
+            <mat-hint>
+                <hr> Haga clic en el ojo para alternar la visibilidad.
+            </mat-hint>
+            <hr>
+            <!-- <mat-hint>Haga clic en el ojo para alternar la visibilidad.</mat-hint> -->
+            <!-- <mat-error *ngIf="form.get('password').hasError('required')">We need a password to log you in</mat-error> -->
+        </mat-form-field>
+
+        <!-- <mat-form-field class="flex-auto">
+            <mat-label>Notes</mat-label>
+            <textarea formControlName="notes" matInput></textarea>
+        </mat-form-field> -->
+        <hr>
+        <!--pre>
+            Estado del Formulario: {{form.valid}}
+            <br>
+            Status: {{form.status}}
+        </pre>
+
+        <pre>
+            {{form.value | json}}
+        </pre-->
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close type="button">CANCELAR</button>
+        <button *ngIf="modoCrear();" [disabled]="!formularioValido"  color="primary" mat-button type="submit">GUARDAR USUARIO</button>
+        <button *ngIf="modoActualizar();" [disabled]="!formularioValido"  color="primary" mat-button type="submit">ACTUALIZAR USUARIO</button>
+    </mat-dialog-actions>
+    
+</form>
+<mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
+    <button mat-menu-item>
+    <mat-icon [icIcon]="icPrint"></mat-icon>
+    <span>Print</span>
+  </button>
+
+    <button mat-menu-item>
+    <mat-icon [icIcon]="icDownload"></mat-icon>
+    <span>Export</span>
+  </button>
+
+    <button mat-menu-item>
+    <mat-icon [icIcon]="icDelete"></mat-icon>
+    <span>Eliminar</span>
+  </button>
+</mat-menu>

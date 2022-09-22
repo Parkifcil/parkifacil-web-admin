@@ -1,0 +1,297 @@
+<div class="h-full" fxLayout="column">
+  <div class="p-6 pb-0 bg-card shadow-b" fxFlex="none">
+    <div vexContainer>
+      <h1
+        class="display-1 mt-0 mb-4"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <span
+          @scaleIn
+          class="w-12 h-12 rounded-full text-primary ltr:mr-4 rtl:ml-4 flex items-center justify-center bg-primary-light"
+        >
+          <ic-icon [icon]="icContacts" size="24px"></ic-icon>
+        </span>
+        <span @fadeInRight class="block">Ingresos Mensuales</span>
+      </h1>
+    </div>
+  </div>
+  <div class="mt-4 p-6 pb-0 bg-card shadow-b" fxFlex="none">
+    <!--  MES - AÑO -->
+    <div class="flex flex-col ">
+      <h3>Selecciona una fecha</h3>
+      <form>
+        <mat-form-field class="mt-5 sm:ml-3 flex-auto">
+          <mat-label for="anio">Selecciona mes</mat-label>
+          <mat-select #mes name="mes" matSelect required>
+            <mat-option *ngFor="let mes of arrmeses" [value]="mes.value">
+              {{ mes.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="mt-5 sm:ml-3 flex-auto">
+          <mat-label for="anio">Selecciona año</mat-label>
+          <mat-select #anio name="anio" matSelect required>
+            <mat-option *ngFor="let anio of arrfechasanios" [value]="anio.anio">
+              {{ anio.anio }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          color="primary"
+          mat-button
+          type="button"
+          (click)="mtdclickobtenerIngresosMensualesFecha(mes.value, anio.value)"
+        >
+          ACEPTAR
+        </button>
+<!--         
+        <mat-form-field class="mt-5 sm:ml-3 flex-auto w-1/3 md:w-1/6">
+          <mat-label>Inicio</mat-label>
+          <input
+            matInput
+            [matDatepicker]="datepickerRefi"
+            #fechaInicio
+            (dateChange)="
+              mtdchangeobtenerMovimientosxPeriodos(
+                fechaInicio.value,
+                fechaFin.value
+              )
+            "
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="datepickerRefi"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #datepickerRefi></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="mt-5 sm:ml-3 flex-auto w-1/3 md:w-1/6">
+          <mat-label>Fin</mat-label>
+          <input
+            matInput
+            [matDatepicker]="datepickerRefe"
+            #fechaFin
+            (dateChange)="
+              mtdchangeobtenerMovimientosxPeriodos(
+                fechaInicio.value,
+                fechaFin.value
+              )
+            "
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="datepickerRefe"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #datepickerRefe></mat-datepicker>
+        </mat-form-field>
+        
+        <button
+          color="primary"
+          mat-button
+          type="button"
+          (click)="mtdclickobtenerIngresosMensualesFecha(mes.value, anio.value)"
+        >
+          ACEPTAR
+        </button> -->
+
+      </form>
+    </div>
+    <!--div vexContainer>
+            <h3 fxLayout="row" fxLayoutAlign="start center">Selecciona una fecha</h3>
+            <form>
+                <mat-form-field class="flex-auto">
+                    <mat-label for="mes">Seleciona mes</mat-label>
+                    <select #mes matNativeControl name="mes">
+                        <option value="" selected></option>
+                        <option *ngFor="let mes of arrmeses" [value]="mes.value">
+                          {{ mes.nombre }}
+                        </option>
+                    </select>
+                </mat-form-field>
+                <mat-form-field class="flex-auto ml-4">
+                    <mat-label for="anio">Seleciona año</mat-label>
+                    <select #anio matNativeControl name="anio">
+                        <option value="" selected></option>
+                        <option *ngFor="let anio of arrfechasanios" [value]="anio.anio">
+                          {{ anio.anio }}
+                        </option>
+                    </select>
+                </mat-form-field>
+                <button class="ml-3" color="primary" mat-button type="button" 
+                        (click)="mtdclickobtenerIngresosMensualesFecha(mes.value, anio.value)">
+                        ACEPTAR
+                </button>
+            </form>
+        </div-->
+    <div vexContainer class="mt-10">
+      <h2 style="text-align: center">
+        Ingresos mensuales - Mes: {{ mesSelected }} Año: {{ anioSelected }}
+      </h2>
+      <div class="mb-2">
+        <mat-grid-list cols="11" rowHeight="50px">
+          <mat-grid-tile
+            *ngFor="let tile of tiles"
+            [colspan]="tile.cols"
+            [rowspan]="tile.rows"
+            [style.background]="tile.color"
+            [style]="tile.style"
+          >
+            <div class="text-inside-grid">{{ tile.text }}</div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </div>
+  </div>
+  <!-- Buscador -->
+  <div vexContainer class="mt-10">
+    <div
+      class="bg-app-bar px-6 h-16 border-b sticky left-0"
+      fxLayout="row"
+      fxLayoutAlign="start center"
+    >
+      <h2
+        class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l"
+        fxFlex="auto"
+        fxHide.xs
+      >
+        <span *ngIf="selection.isEmpty()">Buscar:</span>
+      </h2>
+      <div
+        class="bg-card rounded-full border px-4"
+        fxFlex="800px"
+        fxFlex.lt-md="auto"
+        fxHide.xs
+        fxLayout="row"
+      >
+        <ic-icon [icIcon]="icSearch" size="40px"></ic-icon>
+        <input
+          [formControl]="searchCtrl"
+          class="px-4 py-3 border-0 outline-none w-full bg-transparent"
+          placeholder="Buscar..."
+          type="search"
+        />
+      </div>
+      <span fxFlex></span>
+      <button
+        class="ml-4"
+        fxFlex="none"
+        fxHide.gt-xs
+        mat-icon-button
+        type="button"
+      >
+        <mat-icon [icIcon]="icSearch"></mat-icon>
+      </button>
+    </div>
+  </div>
+  <!-- Tabla -->
+  <vex-page-layout-content>
+    <div class="card overflow-auto">
+      <h2 class="mt-3 mb-3 ml-2">Resumen de concesiones</h2>
+      <table
+        #table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="mat-elevation-z8 tbResumen"
+      >
+        <ng-container matColumnDef="nombreConcesion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Conseción</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="mtdclickDetalleIngreso(element.intIdConcesion)"
+          >
+            {{ element.nombreConcesion }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tiempoVendido">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Tiempo vendido
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="mtdclickDetalleIngreso(element.intIdConcesion)"
+          >
+            {{ element.tiempoVendido }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="montoVendido">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Monto vendido
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="mtdclickDetalleIngreso(element.intIdConcesion)"
+          >
+            {{ element.montoVendido | currency: "CAD":"symbol-narrow" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tiempoDevolucion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Tiempo devolución
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="mtdclickDetalleIngreso(element.intIdConcesion)"
+          >
+            {{ element.tiempoDevolucion }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="montoDevolucion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Monto devolución
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="mtdclickDetalleIngreso(element.intIdConcesion)"
+          >
+            {{ element.montoDevolucion | currency: "CAD":"symbol-narrow" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="mtdclickDetalleIngreso(element.intIdConcesion)"
+          >
+            {{ element.total | currency: "CAD":"symbol-narrow" }}
+          </td>
+        </ng-container>
+
+        <!-- <ng-container matColumnDef="descargar">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descargar</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="mtdDescargarInformeConcesion(element)"
+            >
+              <mat-icon [icIcon]="icDownload" class="mr-1"></mat-icon>
+              Descargar
+            </button>
+          </td>
+        </ng-container> -->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="pageSizeOptions"
+        [pageSize]="pageSize"
+        class="sticky left-0"
+      ></mat-paginator>
+    </div>
+  </vex-page-layout-content>
+</div>

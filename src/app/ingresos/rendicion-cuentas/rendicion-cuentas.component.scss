@@ -1,0 +1,27 @@
+mat-grid-tile {
+    background: lightblue;
+}
+
+.text-inside-grid {
+    text-align: center;
+}
+
+.mat-grid-tile {
+    border: solid 1px #000;
+}
+
+table {
+    width: 100%;
+}
+
+#mensaje {
+    background-color: #c2ccff;
+    margin: 1rem;
+    padding: 1rem;
+    /* IMPORTANTE */
+    text-align: center;
+    border-radius: 13px 13px 13px 13px;
+    -moz-border-radius: 13px 13px 13px 13px;
+    -webkit-border-radius: 13px 13px 13px 13px;
+    border: 2px solid #ccc;
+}
